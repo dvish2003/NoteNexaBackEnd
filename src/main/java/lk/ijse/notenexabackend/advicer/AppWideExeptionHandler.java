@@ -1,6 +1,6 @@
 package lk.ijse.notenexabackend.advicer;
 
-import com.vish.saratoga_backend.dto.ResponseDTO;
+import lk.ijse.notenexabackend.dto.ResponseDTO;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

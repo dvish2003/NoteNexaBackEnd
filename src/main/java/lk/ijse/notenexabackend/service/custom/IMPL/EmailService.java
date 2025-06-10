@@ -1,17 +1,11 @@
 package lk.ijse.notenexabackend.service.custom.IMPL;
 
-import lk.ijse.back_end_prerental.dto.MailDetailDTO;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-/**
- * Author: vishmee
- * Date: 3/18/25
- * Time: 10:30 PM
- * Description:
- */
+
 @Service
 public class EmailService {
     @Autowired

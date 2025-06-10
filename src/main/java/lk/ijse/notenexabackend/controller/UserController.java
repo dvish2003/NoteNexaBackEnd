@@ -1,13 +1,14 @@
 package lk.ijse.notenexabackend.controller;
 
 
-import com.vish.saratoga_backend.dto.AuthDTO;
-import com.vish.saratoga_backend.dto.ResponseDTO;
-import com.vish.saratoga_backend.dto.UserDTO;
-import com.vish.saratoga_backend.repo.UserRepository;
-import com.vish.saratoga_backend.service.custom.UserService;
-import com.vish.saratoga_backend.util.JwtUtil;
-import com.vish.saratoga_backend.util.VarList;
+import lk.ijse.notenexabackend.dto.AuthDTO;
+import lk.ijse.notenexabackend.dto.ResponseDTO;
+import lk.ijse.notenexabackend.dto.UserDTO;
+import lk.ijse.notenexabackend.dto.VerifyUser;
+import lk.ijse.notenexabackend.repo.UserRepository;
+import lk.ijse.notenexabackend.service.custom.UserService;
+import lk.ijse.notenexabackend.util.JwtUtil;
+import lk.ijse.notenexabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +36,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody  UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
         System.out.println("register");
         try {
-            String Role = "User";
+            System.out.println(userDTO);
+            String Role = "user";
             userDTO.setRole(Role);
             int res = userService.saveUser(userDTO);
             switch (res) {
@@ -64,6 +66,47 @@ public class UserController {
                     .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
     }
+
+
+
+    @PostMapping(value = "/verifyUser")
+    public ResponseEntity<ResponseDTO> VerifiedUser(@RequestBody VerifyUser verifyUser) {
+        System.out.println("Verified User"+verifyUser);
+       try{
+           int res = userService.verifyUser(verifyUser.getEmail(), verifyUser.getCode());
+           switch (res) {
+               case VarList.OK -> {
+                   return ResponseEntity.status(HttpStatus.OK)
+                           .body(new ResponseDTO(VarList.OK, "User Verified", verifyUser));
+               }
+               case VarList.Not_Found -> {
+                   return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                           .body(new ResponseDTO(VarList.Not_Acceptable, "Code Is Wrong", null));
+               }
+               default -> {
+                   return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                           .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+               }
+           }
+       }catch (Exception e) {
+           System.out.println("Exception"+e.getMessage());
+       }
+
+        return null;
+    }
+
+    @GetMapping("/getUser")
+    public ResponseEntity<ResponseDTO> getUser(@RequestParam String email) {
+        System.out.println("Get User Use " + email);
+        UserDTO userDTO = userService.searchUser(email);
+        System.out.println("ndsfisjdifsn"+userDTO.getId());
+        if (userDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDTO(VarList.Not_Found, "User Not Found", null));
+        }
+        return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Success", userDTO));
+    }
+
 
     /*@GetMapping("/get4Users")
     public ResponseEntity<ResponseDTO> getTop4Users() {

@@ -1,14 +1,14 @@
 package lk.ijse.notenexabackend.config;
 
 
-import com.vish.saratoga_backend.service.custom.IMPL.UserServiceImpl;
-import com.vish.saratoga_backend.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.notenexabackend.service.custom.IMPL.UserServiceImpl;
+import lk.ijse.notenexabackend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtUtil jwtUtil;
+    private lk.ijse.notenexabackend.util.JwtUtil jwtUtil;
     @Autowired
     private UserServiceImpl userService;
     @Value("${jwt.secret}")

@@ -1,12 +1,14 @@
-package lk.ijse.notenexabackend.custom.IMPL;
+package lk.ijse.notenexabackend.service.custom.IMPL;
 
 
 
-import com.vish.saratoga_backend.Entity.User;
-import com.vish.saratoga_backend.dto.UserDTO;
-import com.vish.saratoga_backend.repo.UserRepository;
-import com.vish.saratoga_backend.service.custom.UserService;
-import com.vish.saratoga_backend.util.VarList;
+
+import lk.ijse.notenexabackend.Entity.User;
+import lk.ijse.notenexabackend.config.VerificationCodeGenerator;
+import lk.ijse.notenexabackend.dto.UserDTO;
+import lk.ijse.notenexabackend.repo.UserRepository;
+import lk.ijse.notenexabackend.service.custom.UserService;
+import lk.ijse.notenexabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,11 +35,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-   /* @Autowired
-    private JavaMailSender mailSender;
-*/
-    /*@Autowired
-    private EmailService emailService;*/
+    @Autowired
+    private EmailService emailService;
 
 
 
@@ -70,20 +69,42 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public int saveUser(UserDTO userDTO) {
+        System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         if (userRepository.existsByEmail(userDTO.getEmail())) {
             return VarList.Not_Acceptable;
         } else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-           /* String verificationCode = VerificationCodeGenerator.generateCode(6);
+            String verificationCode = VerificationCodeGenerator.generateCode(6);
             userDTO.setVerificationCode(verificationCode);
-            userDTO.setVerified(false);*/
+            userDTO.setVerified(false);
             User user = userRepository.save(modelMapper.map(userDTO, User.class));
             System.out.println("dadsad "+user);
-            /*
             emailService.sendVerificationEmail(userDTO.getEmail(), verificationCode);
-*/
             return VarList.Created;
+        }
+    }
+
+
+    @Override
+    public int verifyUser(String email, String code) {
+        User user = userRepository.findByEmail(email);
+        if (user != null && user.getVerificationCode().equals(code)) {
+            user.setVerified(true);
+            user.setVerificationCode(null);
+            userRepository.save(user);
+            return VarList.OK;
+        }
+        return VarList.Not_Found;
+    }
+
+    @Override
+    public UserDTO searchUser(String username) {
+        if (userRepository.existsByEmail(username)) {
+            User user=userRepository.findByEmail(username);
+            return modelMapper.map(user,UserDTO.class);
+        } else {
+            return null;
         }
     }
 

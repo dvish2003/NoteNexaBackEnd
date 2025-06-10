@@ -1,12 +1,12 @@
-package lk.ijse.notenexabackend.custom;
+package lk.ijse.notenexabackend.service.custom;
 
 
-import com.vish.saratoga_backend.dto.UserDTO;
+
+import lk.ijse.notenexabackend.dto.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    //get last 4 users
 
     List<UserDTO> getAllUser();
 
@@ -15,4 +15,8 @@ public interface UserService {
 
 
     int saveUser(UserDTO userDTO);
+
+    int verifyUser(String email, String code);
+
+    UserDTO searchUser(String username);
 }

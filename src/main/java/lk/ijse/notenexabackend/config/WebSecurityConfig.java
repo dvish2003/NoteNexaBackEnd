@@ -6,7 +6,7 @@ package lk.ijse.notenexabackend.config;
  */
 
 
-import com.vish.saratoga_backend.service.custom.IMPL.UserServiceImpl;
+import lk.ijse.notenexabackend.service.custom.IMPL.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,6 +65,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/authenticate",
                                 "/api/v1/user/register",
+                                "/api/v1/user/verifyUser",
+                                "/api/v1/user/getUser",
                                 "/api/v1/auth/refreshToken",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -82,7 +84,7 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173"); // Add your frontend origin here
+        config.addAllowedOrigin("http://localhost:63342"); // Add your frontend origin here
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);

@@ -1,13 +1,15 @@
 package lk.ijse.notenexabackend.repo;
 
 
-import com.vish.saratoga_backend.Entity.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import lk.ijse.notenexabackend.Entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
 
 
 @Repository
-public interface UserRepository extends MongoRepository<User,String> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     User findByEmail(String userName);
 
@@ -15,6 +17,4 @@ public interface UserRepository extends MongoRepository<User,String> {
 
     int deleteByEmail(String userName);
 
-   /* @Query(value = "SELECT * FROM users ORDER BY join_date DESC LIMIT 4", nativeQuery = true)
-    List<User> findLast4MembersByJoinDate();*/
 }
