@@ -27,6 +27,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
+
 // Other imports...
 
 @EnableWebSecurity
@@ -67,6 +69,11 @@ public class WebSecurityConfig {
                                 "/api/v1/user/register",
                                 "/api/v1/user/verifyUser",
                                 "/api/v1/user/getUser",
+                                "/api/v1/note/saveNote",
+                                "/api/v1/note/deleteUserEmail",
+                                "/api/v1/note/deleteUseID",
+                                "/api/v1/note/getUserNoteByEmail",
+                                "/api/v1/note/updateNote",
                                 "/api/v1/auth/refreshToken",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -84,7 +91,10 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:63342"); // Add your frontend origin here
+        config.setAllowedOrigins(List.of(
+                "http://localhost:63342",
+                "https://note-nexa-vishan-chathurangas-projects.vercel.app"
+        ));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
